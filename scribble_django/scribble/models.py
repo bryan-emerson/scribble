@@ -10,6 +10,7 @@ class Artist(models.Model):
         return self.name
 
 class Song(models.Model):
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='songs')
     title = models.CharField(max_length=100)
     album = models.CharField(max_length=100)
     preview_url = models.TextField()
