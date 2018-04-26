@@ -24,8 +24,7 @@ def post_create(request):
 def post_update(request, primary_key):
     post = Post.objects.get(id = primary_key)
     if request.method == 'POST':
-        print('*************************************************************************************')
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, instance = post)
         if form.is_valid:
             post = form.save()
             return redirect('post_detail', primary_key = post.id)
