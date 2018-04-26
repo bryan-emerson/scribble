@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .forms import PostForm
 
 from .models import Post
 
@@ -9,3 +10,13 @@ def post_list(request):
 def post_detail(request, primary_key):
     post = Post.objects.get(id=primary_key)
     return render(request, 'post_detail.html', {'post': post})
+
+def post_create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid:
+            post = form.save()
+            return redirect('post_detail', primary_key=post.id)
+    else:
+        form = PostForm()
+        return render(request, 'post_form.html', {'form': form})
