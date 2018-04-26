@@ -14,3 +14,6 @@ class Song(models.Model):
     title = models.CharField(max_length=100)
     album = models.CharField(max_length=100)
     preview_url = models.TextField(default="")
+
+    def __str__(self):
+        return self.title
