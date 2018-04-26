@@ -76,7 +76,6 @@
     <a href="#new_post">New Thread</a>
   </header>
 
-  {% for post in posts %}
   <div class="container z-depth-1 post">
     <header class="z-depth-3">
       <h3>{{ post.title }}</h3>
@@ -86,13 +85,20 @@
       <p>
         {{post.body}}
       </p>
+      <div>
+        {% for comment in post.comments.all %}
+          <span>{{comment.author}} replies:</span>
+          <p>
+            {{comment.body}}
+          </p>
+        {% endfor %}
+      </div>
       <p>
-        <a href="/posts/{{post.id}}"> {{post.num_comments}} comments</a>
+        <a href="/posts"> Back to Posts </a>
       </p>
     </section>
-
+    
   </div>
-  {% endfor %}
 
 </body>
 
