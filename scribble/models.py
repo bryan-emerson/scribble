@@ -1,19 +1,17 @@
 from django.db import models
 
 # Create your models here.
-class Artist(models.Model):
-    name = models.CharField(max_length=100)
-    nationality = models.CharField(max_length = 25)
-    photo_url = models.TextField(default="")
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    body = models.TextField(default="")
 
     def __str__(self):
-        return self.name
+        return self.title
 
-class Song(models.Model):
-    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='songs')
-    title = models.CharField(max_length=100)
-    album = models.CharField(max_length=100)
-    preview_url = models.TextField(default="")
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    author = models.CharField(max_length = 25)
+    body = models.TextField(default="")
 
     def __str__(self):
         return self.title
