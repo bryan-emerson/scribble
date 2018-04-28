@@ -49,6 +49,19 @@ def comment_create(request, primary_key):
         form = CommentForm()
         return render(request, 'comment_form.html', {'form': form, 'post': post})
 
+def comment_update(request, post_primary_key, primary_key):
+    comment = Comment.objects.get(id = primary_key)
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance = comment)
+        if form.is_valid:
+            staged_comment = form.save(commit=False)
+            staged_comment.post_id = post_primary_key
+            staged_comment.save()
+            return redirect('post_detail', post_primary_key)
+    else:
+        form = CommentForm(instance = comment)
+        return render(request, 'comment_form.html', {'form': form})
+
 def comment_delete(request, post_primary_key, primary_key):
     Comment.objects.get(id = primary_key).delete()
     return redirect('post_detail', post_primary_key)
