@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import PostForm
+from .forms import PostForm, CommentForm
 
-from .models import Post
+from .models import Post, Comment
 
 def post_list(request):
     posts = list(Post.objects.all())
@@ -35,3 +35,20 @@ def post_update(request, primary_key):
 def post_delete(request, primary_key):
     Post.objects.get(id = primary_key).delete()
     return redirect('post_list')
+
+def comment_create(request, primary_key):
+    post = Post.objects.get(id = primary_key)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid:
+            comment = form.save(commit=False)
+            comment.post_id = post.id
+            form.save()
+            return redirect('post_detail', primary_key)
+    else:
+        form = CommentForm()
+        return render(request, 'comment_form.html', {'form': form, 'post': post})
+
+def comment_delete(request, post_primary_key, primary_key):
+    Comment.objects.get(id = primary_key).delete()
+    return redirect('post_detail', post_primary_key)
