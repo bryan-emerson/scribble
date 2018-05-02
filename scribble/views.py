@@ -19,7 +19,7 @@ def post_create(request):
             return redirect('post_detail', primary_key = post.id)
     else:
         form = PostForm()
-        return render(request, 'post_form.html', {'form': form})
+        return render(request, 'post_form.html', {'form': form, 'method': 'POST'})
 
 def post_update(request, primary_key):
     post = Post.objects.get(id = primary_key)
@@ -28,12 +28,14 @@ def post_update(request, primary_key):
         if form.is_valid:
             post = form.save()
             return redirect('post_detail', primary_key = post.id)
-    else:
-        form = PostForm(instance = post)
-        return render(request, 'post_form.html', {'form': form})
+        else:
+            form = PostForm(instance = post)
+            return render(request, 'post_form.html', {'form': form, 'method': 'PUT'})
 
 def post_delete(request, primary_key):
-    Post.objects.get(id = primary_key).delete()
+    print('*' * 80, 'in post_delete')
+    if request.method == 'DELETE':
+        Post.objects.get(id = primary_key).delete()
     return redirect('post_list')
 
 def comment_create(request, primary_key):
@@ -47,9 +49,10 @@ def comment_create(request, primary_key):
             return redirect('post_detail', primary_key)
     else:
         form = CommentForm()
-        return render(request, 'comment_form.html', {'form': form, 'post': post})
+        return render(request, 'comment_form.html', {'form': form, 'post': post, 'method': 'POST'})
 
 def comment_update(request, post_primary_key, primary_key):
+    print('\n in comment_update', request.POST)
     comment = Comment.objects.get(id = primary_key)
     if request.method == 'POST':
         form = CommentForm(request.POST, instance = comment)
@@ -60,8 +63,9 @@ def comment_update(request, post_primary_key, primary_key):
             return redirect('post_detail', post_primary_key)
     else:
         form = CommentForm(instance = comment)
-        return render(request, 'comment_form.html', {'form': form})
+        return render(request, 'comment_form.html', {'form': form, 'method': 'PUT'})
 
 def comment_delete(request, post_primary_key, primary_key):
-    Comment.objects.get(id = primary_key).delete()
+    if request.method == 'POST':
+        Comment.objects.get(id = primary_key).delete()
     return redirect('post_detail', post_primary_key)

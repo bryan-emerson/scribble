@@ -19,7 +19,11 @@
             </p>
             <footer>
               <a href="/posts/{{post.id}}/comments/{{comment.id}}/edit">Edit</a>
-              <a href="/posts/{{post.id}}/comments/{{comment.id}}/delete">Delete</a>
+              <!-- <a href="/posts/{{post.id}}/comments/{{comment.id}}/delete">Delete</a> -->
+              <form method="POST" action="/posts/{{post.id}}/comments/{{comment.id}}/delete">
+                  {% csrf_token %}
+                  <button type="submit">Delete</button>
+              </form>
             </footer>
           </div>
         {% endfor %}
