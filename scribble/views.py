@@ -19,7 +19,7 @@ def post_create(request):
             return redirect('post_detail', primary_key = post.id)
     else:
         form = PostForm()
-        return render(request, 'post_form.html', {'form': form, 'method': 'POST'})
+        return render(request, 'post_form.html', {'form': form})
 
 def post_update(request, primary_key):
     post = Post.objects.get(id = primary_key)
@@ -28,13 +28,12 @@ def post_update(request, primary_key):
         if form.is_valid:
             post = form.save()
             return redirect('post_detail', primary_key = post.id)
-        else:
-            form = PostForm(instance = post)
-            return render(request, 'post_form.html', {'form': form, 'method': 'PUT'})
+    else:
+        form = PostForm(instance = post)
+        return render(request, 'post_form.html', {'form': form})
 
 def post_delete(request, primary_key):
-    print('*' * 80, 'in post_delete')
-    if request.method == 'DELETE':
+    if request.method == 'POST':
         Post.objects.get(id = primary_key).delete()
     return redirect('post_list')
 
@@ -49,7 +48,7 @@ def comment_create(request, primary_key):
             return redirect('post_detail', primary_key)
     else:
         form = CommentForm()
-        return render(request, 'comment_form.html', {'form': form, 'post': post, 'method': 'POST'})
+        return render(request, 'comment_form.html', {'form': form, 'post': post})
 
 def comment_update(request, post_primary_key, primary_key):
     print('\n in comment_update', request.POST)
@@ -63,7 +62,7 @@ def comment_update(request, post_primary_key, primary_key):
             return redirect('post_detail', post_primary_key)
     else:
         form = CommentForm(instance = comment)
-        return render(request, 'comment_form.html', {'form': form, 'method': 'PUT'})
+        return render(request, 'comment_form.html', {'form': form})
 
 def comment_delete(request, post_primary_key, primary_key):
     if request.method == 'POST':
