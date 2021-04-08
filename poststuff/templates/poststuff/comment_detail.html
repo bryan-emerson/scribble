@@ -1,0 +1,16 @@
+{% extends 'poststuff/base.html' %}
+{% block content %}
+  <h2> Comment author: {{ comment.author }} </h2>
+  <h4> Post author: {{ comment.post }} </h4>
+  <p>Post body: {{ comment.post.body }}</p>
+  <p>-----comment below--------</p>
+  <p>{{ comment.body }}</p>
+  <p><a href="{% url 'comment_edit' pk=comment.pk %}">EDIT</a></p>
+  <p><a href="{% url 'comment_delete' pk=comment.pk %}">DELETE</a></p>
+  <h3>Comments</h3>
+
+{% endblock %}
+
+
+<!-- {% url 'post_edit' pk=post.pk %}
+{% url 'post_delete' pk=post.pk %} -->
